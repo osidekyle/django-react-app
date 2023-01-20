@@ -5,12 +5,11 @@ import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
 import FormHelperText from "@mui/material/FormHelperText"
 import FormControl from "@mui/material/FormControl"
-import { Link } from "react-router-dom"
 import Radio from "@mui/material/Radio"
 import RadioGroup from "@mui/material/RadioGroup"
 import FormControlLabel from "@mui/material/FormControlLabel"
 
-const CreateRoomPage = () => {
+const CreateRoomPage = (props) => {
     const defaultVotes = 2
 
     const [guestCanPause, setGuestCanPause] = useState(true)
@@ -31,10 +30,14 @@ const CreateRoomPage = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                votesToSkip,
-                guestCanPause
+                votes_to_skip: votesToSkip,
+                guest_can_pause: guestCanPause
             })
         }
+        fetch("/api/create-room", requestOptions)
+        .then(response => response.json())
+        .then((data) => props.history.push('/room/' + data.code))
+
     }
 
     return (
