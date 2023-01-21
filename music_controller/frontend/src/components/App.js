@@ -5,7 +5,9 @@ import HomePage from "./HomePage"
 const App = () =>
 {
   return (
-    <HomePage />
+    <div className="center">
+      <HomePage />
+    </div>
     )
 }
  
