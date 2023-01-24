@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, Grid, Typography} from "@mui/material"
 import { Link } from "react-router-dom";
 
-const JoinRoomPage = () => {
+const JoinRoomPage = (props) => {
 
     initialState = {
         roomCode: "",
@@ -18,7 +18,29 @@ const JoinRoomPage = () => {
     }
 
     const roomButtonPressed = () => {
-         console.log(state)
+         const requestOptions = {
+            mathod: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                code: state.roomCode
+            })
+         }
+
+         fetch('/api/join-room', requestOptions).then((response) => {
+            if (response.ok){
+                props.history.push(`/room/${state.roomCode}`)
+            }
+            else {
+                setState({
+                    error: "Room not found",
+                })
+            }
+         })
+         .catch((error) => {
+            console.log(error);
+         })
     }
 
     return (
