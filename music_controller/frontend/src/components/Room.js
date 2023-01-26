@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Button, Typography } from "@mui/material"
 
-const Room  = ({match}) => {
-    const [roomCode, setRoomCode] = useState(match.params.roomCode)
+const Room  = (props) => {
+    const [roomCode, setRoomCode] = useState(props.match.params.roomCode)
     const initialState = {
         votesToSkip: 2,
         guestCanPause: false,
@@ -23,7 +23,37 @@ const Room  = ({match}) => {
                 }
             )
         }, [roomCode, setRoomData])
+        getRoomDetails()
     })
+
+    const leaveButtonPressed = () => {
+        const requestOptions = {
+            method: "POST",
+            headers: {"Content-Type": "application/json"}
+        }
+        fetch('/api/leave-room', requestOptions).then((_response) => {
+            props.leaveRoomCallback()
+            props.history.push("/")
+        })
+    }
+
+    const getRoomDetails = () => {
+        return fetch("/api/get-room?code=" + roomCode)
+        .then((response) => {
+            if (!response.ok){
+                props.leaveRoomCallback()
+                props.history.push("/")
+            }
+            return response.json()
+        })
+        .then((data) => {
+            setRoomData({
+                votesToSkip: data.votes_to_skip,
+                guestCanPause: data.guest_can_pause,
+                isHost: data.is_host
+            })
+        })
+    }
 
     return (
         <Grid container spacing={1}>
@@ -48,7 +78,7 @@ const Room  = ({match}) => {
                 </Typography>
             </Grid>
             <Grid item xs={12} align="center">
-                <Button color="secondary" variant="contained" href="/">
+                <Button color="secondary" variant="contained" onClick={leaveButtonPressed}>
                     Leave Room
                 </Button>
             </Grid>

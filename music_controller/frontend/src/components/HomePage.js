@@ -28,6 +28,12 @@ const HomePage = () => {
 
     }, [])
 
+    const clearRoomCode  = () => {
+        setState({
+            roomCOde: null
+        })
+    }
+
     const renderHomePage = () => {
         return (
             <Grid container spacing={3}>
@@ -59,7 +65,11 @@ const HomePage = () => {
                 }} />
                 <Route path='/create' component={CreateRoomPage} />
                 <Route path='/join' component={JoinRoomPage} />
-                <Route path='/room/:roomCode' component={Room} />
+                <Route path='/room/:roomCode' render={
+                    (props) => {
+                        return <Room {...props} leaeRoomCallback={clearRoomCode} />
+                    }
+                } />
             </Switch>
         </Router>
     )
