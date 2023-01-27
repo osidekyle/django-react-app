@@ -6,7 +6,8 @@ const Room  = (props) => {
     const initialState = {
         votesToSkip: 2,
         guestCanPause: false,
-        isHost: false
+        isHost: false,
+        showSettings: false
     }
     const [roomData, setRoomData] = useState(initialState)
 
@@ -55,6 +56,32 @@ const Room  = (props) => {
         })
     }
 
+    const updateShowSettings = (value) => {
+        setRoomData({
+            showSettings: value
+        })
+    }
+
+    const renderSettingsButton = () => {
+        return (
+            <Grid item xs={12} align="center">
+                <Button variant="contained" color="primary" onClick={() => updateShowSettings(true)}>
+                    Settings
+                </Button>
+            </Grid>
+
+        )
+    }
+
+    const renderSettings = () => {
+        <Grid container spacing={1}>
+            <Grid item xs={12} align="center">
+                
+            </Grid>
+            <Grid item xs={12} align="center"></Grid>
+        </Grid>
+    }
+
     return (
         <Grid container spacing={1}>
             <Grid item xs={12} align="center">
@@ -77,6 +104,7 @@ const Room  = (props) => {
                     Host: {roomData.isHost}
                 </Typography>
             </Grid>
+            { roomData.isHost ? renderSettingsButton() : null }
             <Grid item xs={12} align="center">
                 <Button color="secondary" variant="contained" onClick={leaveButtonPressed}>
                     Leave Room
